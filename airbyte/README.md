@@ -1,19 +1,22 @@
 # Airbyte API Client
 
+## Overview
+
 A Python client for interacting with the Airbyte API. This client provides methods to update sources, create connections, and delete connections, facilitating easy integration and management of data sync processes within Airbyte.
 
 ## Installation
 
 To install the Airbyte API client, you can use pip:
 
+```bash
 pip install airbyte-api-client
 
 
-#USAGE
 
 # Instantiate the API client
 api_client = AirbyteApiClient("http://localhost:8000")
 
+```python
 # Example: Update a source
 api_client.update_source(source_id, account_id, secret_key, name)
 
@@ -22,6 +25,7 @@ api_client.create_connection(source_id, source_definition_id, destination_id, sy
 
 # Example: Delete a connection
 api_client.delete_connection(connection_id)
+
 
 API Documentation
 For more details on the Airbyte API, refer to the official documentation link below:
