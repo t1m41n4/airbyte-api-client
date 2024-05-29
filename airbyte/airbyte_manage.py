@@ -81,18 +81,3 @@ class AirbyteApiClient:
             print(f"Connection {connection_id} deleted successfully")
         else:
             print(f"Failed to delete connection {connection_id}: {response.content}")
-
-
-# Example usage
-if __name__ == "__main__":
-    # Instantiate the API client
-    api_client = AirbyteApiClient("http://localhost:8000")
-
-    # Example: Update a source
-    # api_client.update_source(source_id, account_id, secret_key, name)
-
-    # Example: Create a connection
-    # api_client.create_connection(source_id, source_definition_id, destination_id, sync_mode, namespace_definition, namespace_format, prefix, existing_connection_ids)
-
-    # Example: Delete a connection
-    # api_client.delete_connection(connection_id)
