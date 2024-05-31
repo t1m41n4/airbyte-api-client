@@ -11,13 +11,13 @@ import json
 class AirbyteApiClient:
     """Airbyte API Client."""
 
-    def __init__(self, base_url):
+    def __init__(self, base_url: str = "https://api.airbyte.com") -> None:
         """Initialize the Airbyte API Client."""
         self.base_url = base_url
 
-    def update_source(self, source_id, account_id, secret_key, name):
+    def update_source(self, source_id, account_id=None, secret_key=None, name=None):
         """Update a source in the Airbyte API."""
-        url = f"{self.base_url}/api/v1/sources/update"
+        url = f"{self.base_url}/v1/sources/{source_id}"
         headers = {"Content-Type": "application/json"}
         data = {
             "sourceId": source_id,
@@ -27,57 +27,57 @@ class AirbyteApiClient:
                 "api_key": secret_key,
             },
         }
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.patch(url, headers=headers, json=data)
         if response.status_code == 200:
             print(
                 f"Source {source_id} updated successfully with account ID: {account_id}"
             )
-            return response.json()
         else:
-            print(f"Failed to update source {source_id}: {response.content}")
-            return None
+            raise Exception(f"Failed to update source {source_id}: {response.content}")
+
+        return response
 
     def create_connection(
         self,
         source_id,
-        source_definition_id,
         destination_id,
-        sync_mode,
-        namespace_definition,
-        namespace_format,
-        prefix,
-        existing_connection_ids,
-    ):
+        source_definition_id=None,
+        sync_mode=None,
+        namespace_definition=None,
+        namespace_format=None,
+        prefix=None,
+        existing_connection_ids=None,
+    ) -> str:
         """Create a new connection in the Airbyte API."""
-        url = f"{self.base_url}/api/v1/connections/create"
+        url = f"{self.base_url}/v1/connections"
         headers = {"Content-Type": "application/json"}
-        data = {
+        payload = {
             "sourceId": source_id,
-            "sourceDefinitionId": source_definition_id,
             "destinationId": destination_id,
+            "sourceDefinitionId": source_definition_id,
             "syncMode": sync_mode,
             "namespaceDefinition": namespace_definition,
             "namespaceFormat": namespace_format,
             "prefix": prefix,
             "existingConnectionIds": existing_connection_ids,
         }
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, data=json.dumps(payload))
         if response.status_code == 200:
             connection_data = response.json()
             connection_id = connection_data["connectionId"]
             print("Connection created successfully")
-            return connection_id
         else:
-            print(f"Failed to create connection: {response.content}")
-            return None
+            raise Exception(f"Failed to create connection: {response.content}")
 
-    def delete_connection(self, connection_id):
+        return str(connection_id)
+
+    def delete_connection(self, connection_id) -> None:
         """Delete a connection in the Airbyte API."""
-        url = f"{self.base_url}/api/v1/connections/delete"
-        headers = {"Content-Type": "application/json"}
-        data = {"connectionId": connection_id}
-        response = requests.post(url, headers=headers, json=data)
+        url = f"{self.base_url}/v1/connections/{connection_id}"
+        response = requests.delete(url)
         if response.status_code == 200:
             print(f"Connection {connection_id} deleted successfully")
         else:
-            print(f"Failed to delete connection {connection_id}: {response.content}")
+            raise Exception(
+                f"Failed to delete connection {connection_id}: {response.content}"
+            )
