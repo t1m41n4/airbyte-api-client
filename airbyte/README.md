@@ -3,7 +3,9 @@
 
 Overview
 
-A Python client for interacting with the Airbyte API. This client provides methods to update sources, create connections, and delete connections, facilitating easy integration and management of data sync processes within Airbyte.
+A Python client for interacting with the Airbyte API. This client provides methods to update sources,
+create connections, and delete connections, facilitating easy integration and management of data sync
+processes within Airbyte.
 
 Installation
 To install the Airbyte API client, you can use pip:
