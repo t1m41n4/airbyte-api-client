@@ -17,7 +17,7 @@ class AirbyteApiClient:
         """Initialize the Airbyte API Client."""
         self.base_url = base_url
 
-    def update_source(self, source_id, account_id=None, secret_key=None, name=None):
+    def update_source(self, source_id, account_id=None, secret_key=None, name=None) -> Response:
         """Update a source in the Airbyte API."""
         url = f"{self.base_url}/v1/sources/{source_id}"
         headers = {"Content-Type": "application/json"}
