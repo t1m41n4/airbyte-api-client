@@ -5,6 +5,8 @@ and delete connections within an Airbyte instance.
 """
 
 import requests
+
+from requests import Response
 import json
 
 
@@ -81,3 +83,32 @@ class AirbyteApiClient:
             raise Exception(
                 f"Failed to delete connection {connection_id}: {response.content}"
             )
+
+    def list_sources(self, limit: int = 20, offset: int = 0) -> dict:
+        """List sources in the Airbyte API."""
+        url = f"{self.base_url}/v1/sources"
+        params = {"includeDeleted": False, "limit": limit, "offset": offset}
+        response = self.get(url, params=params)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise Exception(f"Failed to list sources: {response.content}")
+
+    def create_source(
+        self, name, workspace_id, configuration, definition_id=None
+    ) -> Response:
+        """Create a new source in the Airbyte API."""
+        url = f"{self.base_url}/v1/sources"
+        payload = {
+            "name": name,
+            "workspaceId": workspace_id,
+            "configuration": configuration,
+            "definitionId": definition_id,
+        }
+        response = self.post(url, json=payload)
+        if response.status_code == 200:
+            print("Source created successfully")
+        else:
+            raise Exception(f"Failed to create source: {response.content}")
+
+        return response
