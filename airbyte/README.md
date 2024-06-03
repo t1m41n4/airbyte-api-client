@@ -46,6 +46,19 @@ api_client.create_connection(
 
 # Example: Delete a connection
 api_client.delete_connection(connection_id="your_connection_id")
+
+# Example: List sources
+sources = api_client.list_sources(limit=20, offset=0)
+print(sources)
+
+# Example: Create a source
+response = api_client.create_source(
+    name="your_source_name",
+    workspace_id="your_workspace_id",
+    configuration={"your_configuration_key": "your_configuration_value"},
+    definition_id="your_definition_id"
+)
+print(response.json())
 ```
 
 
@@ -66,3 +79,5 @@ The Airbyte API client requires the base URL of your Airbyte instance. Make sure
 - Improved error handling and exception raising
 - Set default `base_url` to 'https://api.airbyte.com'
 - Implemented keyword arguments for methods to allow optional parameters
+- Added list_sources method to list sources
+- Added create_source method to create a new source
