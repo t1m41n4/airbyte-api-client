@@ -27,21 +27,12 @@ api_client = AirbyteApiClient("https://api.airbyte.com")
 # Example: Update a source
 api_client.update_source(
     source_id="your_source_id",
-    account_id="your_account_id",
-    secret_key="your_secret_key",
-    name="your_source_name"
 )
 
 # Example: Create a connection
 api_client.create_connection(
     source_id="your_source_id",
-    destination_id="your_destination_id",
-    source_definition_id="your_source_definition_id",
-    sync_mode="your_sync_mode",
-    namespace_definition="your_namespace_definition",
-    namespace_format="your_namespace_format",
-    prefix="your_prefix",
-    existing_connection_ids=["existing_connection_id1", "existing_connection_id2"]
+    destination_id="your_destination_id"
 )
 
 # Example: Delete a connection
@@ -55,10 +46,9 @@ print(sources)
 response = api_client.create_source(
     name="your_source_name",
     workspace_id="your_workspace_id",
-    configuration={"your_configuration_key": "your_configuration_value"},
-    definition_id="your_definition_id"
+    configuration={"your_configuration_key": "your_configuration_value"}
 )
-print(response.json())
+
 ```
 
 
@@ -81,3 +71,13 @@ The Airbyte API client requires the base URL of your Airbyte instance. Make sure
 - Implemented keyword arguments for methods to allow optional parameters
 - Added list_sources method to list sources
 - Added create_source method to create a new source
+
+## New Changes:
+
+- Updated update_source method to accept **kwargs for additional parameters
+- Updated create_connection method to accept **kwargs for additional parameters
+- Simplified delete_connection by removing the explicit return type
+- Changed list_sources to use requests.get instead of self.get
+- Changed list_sources return type from dict to str
+- Changed create_source to use requests.post instead of self.post
+
