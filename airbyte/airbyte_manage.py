@@ -6,7 +6,6 @@ delete connections, list sources, and create sources within an Airbyte instance.
 
 import requests
 
-from requests import Response
 import json
 
 
@@ -17,63 +16,40 @@ class AirbyteApiClient:
         """Initialize the Airbyte API Client."""
         self.base_url = base_url
 
-    def update_source(
-        self, source_id, account_id=None, secret_key=None, name=None
-    ) -> Response:
+    def update_source(self, source_id, **kwargs) -> None:
         """Update a source in the Airbyte API."""
         url = f"{self.base_url}/v1/sources/{source_id}"
         headers = {"Content-Type": "application/json"}
-        data = {
+        payload = {
             "sourceId": source_id,
-            "name": name,
-            "connectionConfiguration": {
-                "account_id": account_id,
-                "api_key": secret_key,
-            },
         }
-        response = requests.patch(url, headers=headers, json=data)
+        payload.update(kwargs)
+        response = requests.patch(url, headers=headers, json=payload)
         if response.status_code == 200:
             print(
-                f"Source {source_id} updated successfully with account ID: {account_id}"
+                f"Source {source_id} updated successfully"
             )
         else:
             raise Exception(f"Failed to update source {source_id}: {response.content}")
 
-        return response
+        return None
 
-    def create_connection(
-        self,
-        source_id,
-        destination_id,
-        source_definition_id=None,
-        sync_mode=None,
-        namespace_definition=None,
-        namespace_format=None,
-        prefix=None,
-        existing_connection_ids=None,
-    ) -> str:
+    def create_connection(self, source_id, destination_id, **kwargs) -> None:
         """Create a new connection in the Airbyte API."""
         url = f"{self.base_url}/v1/connections"
         headers = {"Content-Type": "application/json"}
         payload = {
             "sourceId": source_id,
             "destinationId": destination_id,
-            "sourceDefinitionId": source_definition_id,
-            "syncMode": sync_mode,
-            "namespaceDefinition": namespace_definition,
-            "namespaceFormat": namespace_format,
-            "prefix": prefix,
-            "existingConnectionIds": existing_connection_ids,
         }
-        response = requests.post(url, headers=headers, data=json.dumps(payload))
+        payload.update(kwargs)
+        response = requests.post(url, headers=headers, json=payload)
         if response.status_code == 200:
-            connection_data = response.json()
-            connection_id = connection_data["connectionId"]
             print("Connection created successfully")
         else:
             raise Exception(f"Failed to create connection: {response.content}")
 
-        return str(connection_id)
+        return None
 
     def delete_connection(self, connection_id) -> None:
         """Delete a connection in the Airbyte API."""
@@ -86,31 +62,31 @@ class AirbyteApiClient:
                 f"Failed to delete connection {connection_id}: {response.content}"
             )
 
-    def list_sources(self, limit: int = 20, offset: int = 0) -> dict:
+        return None
+
+    def list_sources(self, limit: int = 20, offset: int = 0) -> str:
         """List sources in the Airbyte API."""
         url = f"{self.base_url}/v1/sources"
         params = {"includeDeleted": False, "limit": limit, "offset": offset}
-        response = self.get(url, params=params)
+        response = requests.get(url, params=params)
         if response.status_code == 200:
-            return response.json()
+            return str(response.content)
         else:
             raise Exception(f"Failed to list sources: {response.content}")
 
-    def create_source(
-        self, name, workspace_id, configuration, definition_id=None
-    ) -> Response:
+    def create_source(self, name, workspace_id, configuration, **kwargs) -> None:
         """Create a new source in the Airbyte API."""
         url = f"{self.base_url}/v1/sources"
         payload = {
             "name": name,
             "workspaceId": workspace_id,
             "configuration": configuration,
-            "definitionId": definition_id,
         }
-        response = self.post(url, json=payload)
+        payload.update(kwargs)
+        response = requests.post(url, json=payload)
         if response.status_code == 200:
             print("Source created successfully")
         else:
             raise Exception(f"Failed to create source: {response.content}")
 
-        return response
+        return None
