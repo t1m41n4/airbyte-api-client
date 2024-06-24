@@ -18,21 +18,24 @@ Instantiate the API client:
 
 ```python
 from airbyte_api_client import AirbyteApiClient
-
-# Instantiate the API client
-api_client = AirbyteApiClient("https://api.airbyte.com")
+api_client = AirbyteApiClient("https://api.airbyte.com/v1")
 
 
 ```python
-# Example: Update a source
+# Example: Update a source with additional parameters
 api_client.update_source(
     source_id="your_source_id",
+    name="updated_source_name",
+    workspace_id="your_workspace_id",
+    connectionConfiguration={"your_new_configuration_key": "your_new_configuration_value"}
 )
 
-# Example: Create a connection
-api_client.create_connection(
+# Example: Create a connection with additional parameters
+api_client.update_source(
     source_id="your_source_id",
-    destination_id="your_destination_id"
+    name="updated_source_name",
+    workspace_id="your_workspace_id",
+    connectionConfiguration={"your_new_configuration_key": "your_new_configuration_value"}
 )
 
 # Example: Delete a connection
@@ -46,7 +49,8 @@ print(sources)
 response = api_client.create_source(
     name="your_source_name",
     workspace_id="your_workspace_id",
-    configuration={"your_configuration_key": "your_configuration_value"}
+    sourceDefinitionId="your_source_definition_id",
+    connectionConfiguration={"your_configuration_key": "your_configuration_value"}
 )
 
 ```
@@ -54,30 +58,22 @@ response = api_client.create_source(
 
 ## API Documentation
 
-For more details on the Airbyte API, refer to the [official documentation](https://reference.airbyte.com/reference/start).
+For more details on the Airbyte API, refer to the [official documentation](https://reference.airbyte.com/reference/).
 
 ## Configuration
 
-The Airbyte API client requires the base URL of your Airbyte instance. Make sure to initialize the client with the correct base URL.
+The Airbyte API client requires the base URL of your Airbyte instance. Initialize the client with the correct base URL and optionally configure other parameters using environment variables or directly in your code.
 
 ## Changes
 
-- Updated base URL and HTTP methods for endpoints to align with new API standards
-- Updated `update_source` method to use PATCH instead of POST
-- Modified `create_connection` method to handle payload as JSON string
-- Updated `delete_connection` method to use DELETE instead of POST
-- Improved error handling and exception raising
-- Set default `base_url` to 'https://api.airbyte.com'
-- Implemented keyword arguments for methods to allow optional parameters
-- Added list_sources method to list sources
-- Added create_source method to create a new source
-
-## New Changes:
-
-- Updated update_source method to accept **kwargs for additional parameters
-- Updated create_connection method to accept **kwargs for additional parameters
-- Simplified delete_connection by removing the explicit return type
-- Changed list_sources to use requests.get instead of self.get
-- Changed list_sources return type from dict to str
-- Changed create_source to use requests.post instead of self.post
+- Updated base URL and HTTP methods for endpoints to align with new API standards.
+- Enhanced `update_source` method to support additional parameters using **kwargs.
+- Improved `create_connection` method to handle JSON payload more efficiently.
+- Simplified `delete_connection` method by removing explicit return type.
+- Optimized `list_sources` method to use `requests.get` directly for improved performance.
+- Refactored `create_source` method to use `requests.post` for clearer code structure and consistency.
+- Improved error handling and response messaging throughout the API client.
+- Added support for environment variables to configure API client parameters.
+- Implemented HTTP Basic Authentication for secure API requests.
+- Set default `base_url` to 'https://api.airbyte.com/v1'
 
