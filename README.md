@@ -258,24 +258,6 @@ The premium version includes:
 - Custom feature development
 - On-premises deployment support
 
-## Pricing Plans
-
-1. **Community Edition (Free)**
-   - Basic sync operations
-   - Standard monitoring
-   - Community support
-
-2. **Professional ($299/month)**
-   - All Community features
-   - Advanced monitoring
-   - Dashboard access
-   - Email support
-
-3. **Enterprise (Custom pricing)**
-   - All Professional features
-   - Custom features
-   - Premium support
-   - On-premises deployment
 
 ## Getting Started with Premium Features
 
@@ -502,27 +484,6 @@ client._audit_log("sensitive_operation", {"user": "admin"})
 
 Turn your data integration capabilities into a service business:
 
-### Service Tiers
-
-1. **Basic Tier ($99/month)**
-   - Daily data syncs
-   - Basic transformations
-   - Email support
-   - Up to 5 data sources
-
-2. **Professional Tier ($299/month)**
-   - Hourly data syncs
-   - Advanced transformations
-   - Priority support
-   - Up to 20 data sources
-   - Custom destinations
-
-3. **Enterprise Tier ($999/month)**
-   - Real-time data syncs
-   - Custom transformations
-   - Dedicated support
-   - Unlimited sources
-   - SLA guarantees
 
 ### Example: Creating a Data Pipeline
 
