@@ -1,0 +1,30 @@
+Business Source License 1.1
+
+Parameters
+
+Licensor:             @t1m41n4
+Licensed Work:        Airbyte API Client
+                     The Licensed Work is (c) 2024 @t1m41n4
+
+Additional Use Grant: You may make use of the Licensed Work, provided that
+                     you may not use the Licensed Work for a Data Integration
+                     Service.
+
+                     A "Data Integration Service" is a commercial offering
+                     that allows third parties (other than your employees and
+                     contractors) to access the functionality of the Licensed
+                     Work by creating connections between data sources that
+                     they define or control.
+
+Change Date:          2027-01-01
+
+Change License:       Apache License, Version 2.0
+
+For information about alternative licensing arrangements for the Software,
+please contact: licensing@yourcompany.com
+
+Notice
+
+The Business Source License (this document, or the "License") is not an Open
+Source license. However, the Licensed Work will eventually be made available
+under an Open Source License, as stated in this License.
