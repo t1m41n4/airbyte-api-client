@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Integration as a Service</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">DataSync Pro</div>
+        <div class="menu">
+            <a href="#pricing">Pricing</a>
+            <a href="#features">Features</a>
+            <a href="/login">Login</a>
+        </div>
+    </nav>
+
+    <section id="hero">
+        <h1>Enterprise Data Integration Made Simple</h1>
+        <p>Connect, Transform, and Sync Your Data in Minutes</p>
+        <button onclick="window.location.href='/signup'">Get Started</button>
+    </section>
+
+    <section id="pricing">
+        <div class="pricing-cards">
+            <div class="card basic">
+                <h2>Basic</h2>
+                <h3>$99/month</h3>
+                <ul>
+                    <li>5 Data Sources</li>
+                    <li>Daily Syncs</li>
+                    <li>Basic Support</li>
+                </ul>
+                <button onclick="checkout('basic')">Choose Plan</button>
+            </div>
+            <!-- Add Professional and Enterprise cards -->
+        </div>
+    </section>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
