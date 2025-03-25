@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DataSync Dashboard</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <nav>
+                <a href="#pipelines">Pipelines</a>
+                <a href="#monitoring">Monitoring</a>
+                <a href="#billing">Billing</a>
+                <a href="#settings">Settings</a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div id="pipelines" class="section">
+                <h2>Data Pipelines</h2>
+                <button onclick="createPipeline()">New Pipeline</button>
+                <div id="pipeline-list"></div>
+            </div>
+
+            <div id="monitoring" class="section">
+                <h2>Performance Monitoring</h2>
+                <div id="metrics-dashboard"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
