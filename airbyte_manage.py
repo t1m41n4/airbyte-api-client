@@ -1,14 +1,13 @@
 """
 API Client for interacting with Airbyte, a data integration platform.
-This client provides methods to update sources, create connections,
-delete connections, list sources, and create sources within an Airbyte instance.
+This client provides methods to update sources, create connections, delete
+connections, list sources, and create sources within an Airbyte instance.
 """
 
 import os
-import time
 import logging
 import asyncio
-from typing import Optional, Dict, Any, List, Union
+from typing import Optional, Dict, Any, List
 from datetime import datetime
 
 import requests
@@ -17,7 +16,6 @@ from pydantic import BaseModel, Field, validator
 from tenacity import retry, stop_after_attempt, wait_exponential
 from dotenv import load_dotenv
 from requests.auth import HTTPBasicAuth
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from prometheus_client import Counter, Histogram
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -33,23 +31,35 @@ from functools import wraps
 import jwt
 import secrets
 from cryptography.fernet import Fernet
-from datetime import datetime, timedelta
 
 # Metrics
-SYNC_DURATION = Histogram('airbyte_sync_duration_seconds', 'Duration of sync jobs')
-API_REQUESTS = Counter('airbyte_api_requests_total', 'Total API requests made')
+SYNC_DURATION = Histogram(
+    'airbyte_sync_duration_seconds',
+    'Duration of sync jobs'
+)
+API_REQUESTS = Counter(
+    'airbyte_api_requests_total',
+    'Total API requests made'
+)
 
 load_dotenv()
+
+
+class LicenseException(Exception):
+    """Exception for license validation failures"""
+
 
 class ConnectionStatus(BaseModel):
     status: str
     last_sync: Optional[datetime]
     latest_status: Dict[str, Any]
 
+
 class WorkspaceDetails(BaseModel):
     workspace_id: str
     name: str
     settings: Dict[str, Any]
+
 
 @dataclass
 class SyncJob:
@@ -58,6 +68,7 @@ class SyncJob:
     start_time: datetime
     end_time: Optional[datetime] = None
     records_synced: int = 0
+
 
 class SourceSchema(BaseModel):
     name: str
@@ -68,12 +79,15 @@ class SourceSchema(BaseModel):
     @validator('connectionConfiguration')
     def validate_config(cls, v):
         required_fields = {'api_key', 'start_date'}
-        if not all(field in v for field in required_fields):
-            raise ValueError(f"Missing required fields: {required_fields - v.keys()}")
+        missing = required_fields - v.keys()
+        if missing:
+            raise ValueError(f"Missing required fields: {missing}")
         return v
+
 
 class PremiumFeatureException(Exception):
     """Exception for premium feature access"""
+
 
 def premium_feature(func):
     """Decorator to mark premium features"""
@@ -86,11 +100,15 @@ def premium_feature(func):
         return await func(self, *args, **kwargs)
     return wrapper
 
+
 class SecurityConfig(BaseModel):
     api_key_rotation_days: int = 30
     max_failed_attempts: int = 5
-    encryption_key: str = Field(default_factory=lambda: Fernet.generate_key().decode())
+    encryption_key: str = Field(
+        default_factory=lambda: Fernet.generate_key().decode()
+    )
     license_key: Optional[str] = None
+
 
 class AirbyteApiClient:
     """Airbyte API Client with expanded functionality."""
@@ -154,7 +172,13 @@ class AirbyteApiClient:
         return f"{method}:{endpoint}:{hash(str(kwargs))}"
 
     @circuit(failure_threshold=5, recovery_timeout=60)
-    async def _make_async_request(self, method: str, endpoint: str, use_cache: bool = True, **kwargs) -> Dict[str, Any]:
+    async def _make_async_request(
+        self,
+        method: str,
+        endpoint: str,
+        use_cache: bool = True,
+        **kwargs
+    ) -> Dict[str, Any]:
         """Enhanced async request with caching and tracing."""
         cache_key = self._cache_key(method, endpoint, **kwargs)
 
@@ -165,7 +189,11 @@ class AirbyteApiClient:
 
         with self.tracer.start_as_current_span(f"airbyte_{endpoint}") as span:
             try:
-                response = await super()._make_async_request(method, endpoint, **kwargs)
+                response = await super()._make_async_request(
+                    method,
+                    endpoint,
+                    **kwargs
+                )
                 span.set_status(Status(StatusCode.OK))
 
                 if use_cache:
@@ -418,7 +446,10 @@ class AirbyteApiClient:
         """Premium feature: Advanced monitoring with ML-based anomaly detection"""
         metrics = await self._collect_advanced_metrics()
         anomalies = self._detect_anomalies(metrics)
-        return {"metrics": metrics, "anomalies": anomalies}
+        return {
+            "metrics": metrics,
+            "anomalies": anomalies
+        }
 
     @premium_feature
     async def auto_optimization(self) -> Dict[str, Any]:
@@ -453,7 +484,9 @@ class AirbyteApiClient:
                 "timestamp": datetime.utcnow().isoformat(),
                 "user": self.username,
                 "action": action,
-                "details": self._fernet.encrypt(str(details).encode()).decode(),
+                "details": self._fernet.encrypt(
+                    str(details).encode()
+                ).decode(),
             }
         )
 

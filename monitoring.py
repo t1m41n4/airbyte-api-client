@@ -1,8 +1,9 @@
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 import psutil
-from typing import Dict, List
+from typing import Callable
 from prometheus_client import Gauge, Histogram, Counter
+
 
 @dataclass
 class PerformanceMetrics:
@@ -12,6 +13,7 @@ class PerformanceMetrics:
     cache_hit_rate: float
     average_response_time: float
 
+
 class AirbyteMonitoring:
     def __init__(self):
         self.performance_gauge = Gauge(
@@ -19,11 +21,13 @@ class AirbyteMonitoring:
             'Performance metrics for Airbyte client',
             ['metric_name']
         )
+
         self.response_times = Histogram(
             'airbyte_response_time',
             'Response times for Airbyte API calls',
             ['endpoint']
         )
+
         self.error_counter = Counter(
             'airbyte_errors_total',
             'Total number of errors',
@@ -44,6 +48,6 @@ class AirbyteMonitoring:
         # Implementation for cache hit rate calculation
         pass
 
-    def alert_on_threshold(self, metric: float, threshold: float, alert_func: callable):
+    def alert_on_threshold(self, metric: float, threshold: float, alert_func: Callable):
         if metric > threshold:
             alert_func(f"Metric {metric} exceeded threshold {threshold}")
