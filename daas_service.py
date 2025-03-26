@@ -1,8 +1,7 @@
-from typing import Dict, List, Any
-from fastapi import FastAPI, HTTPException, Security
-from fastapi.security import APIKeyHeader
+from typing import Dict, Any
 from pydantic import BaseModel
 from airbyte_manage import AirbyteApiClient
+
 
 class DataServiceConfig(BaseModel):
     name: str
@@ -12,13 +11,26 @@ class DataServiceConfig(BaseModel):
     transformation_rules: Dict[str, Any] = {}
     pricing_tier: str = "basic"
 
+
 class DataService:
     def __init__(self, client: AirbyteApiClient):
         self.client = client
         self.pricing = {
-            "basic": {"price": 99, "sync_frequency": "daily", "support": "email"},
-            "professional": {"price": 299, "sync_frequency": "hourly", "support": "priority"},
-            "enterprise": {"price": 999, "sync_frequency": "real-time", "support": "dedicated"}
+            "basic": {
+                "price": 99,
+                "sync_frequency": "daily",
+                "support": "email"
+            },
+            "professional": {
+                "price": 299,
+                "sync_frequency": "hourly",
+                "support": "priority"
+            },
+            "enterprise": {
+                "price": 999,
+                "sync_frequency": "real-time",
+                "support": "dedicated"
+            }
         }
 
     async def create_data_pipeline(self, config: DataServiceConfig) -> Dict[str, Any]:

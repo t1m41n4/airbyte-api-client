@@ -2,19 +2,35 @@
 
 ## Getting Started
 
-1. **Setup Development Environment**
+1. **Install Prerequisites**
+```bash
+# On Debian/Ubuntu systems
+sudo apt update
+sudo apt install python3.10 python3.10-dev python3.10-venv python3-pip
+# If Python 3.10 is not available, use Python 3.9 or the latest available version:
+sudo apt install python3-dev python3-venv python3-pip
+```
+
+2. **Setup Development Environment**
 ```bash
 # Clone the repository
 git clone https://github.com/t1m41n4/airbyte-api-client.git
 cd airbyte-api-client
 
+# Create virtual environment with the latest Python version
+# First, check your Python version
+python3 --version
+
 # Create virtual environment
-python -m venv venv
+python3 -m venv venv
+
+# Activate virtual environment
 source venv/bin/activate  # Linux/Mac
 # or
 .\venv\Scripts\activate  # Windows
 
 # Install dependencies
+pip install --upgrade pip setuptools wheel
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```

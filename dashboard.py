@@ -1,5 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, Depends
 from fastapi.security import APIKeyHeader
 import plotly.express as px
 import pandas as pd
